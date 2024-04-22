@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .profile {
+            
+            margin-top: 30%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+        .foto {
+            justify-content: center;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px
+        }
+
+        .foto img {
+            width: 200px;
+            height: 200px;
+            border-radius: 10px;
+            object-fit: cover;
+            background-size: cover;
+        }
+
+        .foto a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .foto a:hover {
+            text-decoration: underline;
+        }
+
+        .profile form {
+            margin-top: 20px;
+        }
+
+        input[type="file"] {
+            text-align: center;
+            align-items: center;
+            margin-bottom: 10px;
+            width: 100%;
+            margin: 10px 20;
+
+        }
+
+        .inputIdFoto {
+            text-align: center;
+            display: block;
+        }
+        
+
+        .btnAtt {
+            background-color: rgb(160, 31, 31);
+            border: none;
+            color: white;
+            border-radius: 20px;
+            width: 100%;
+            font-weight: 900;
+        }
+
+        .btnAtt:hover {
+            color: #000;
+            background-color: #e6e6e6;
+            transition: all 0.2s;
+        }
+
+        .titleProfile {
+            font-size: 20px;
+            font-weight: 800;
+            text-shadow: 0px 4px 3px black;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            padding-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="profile">
+
+        <h2 class="titleProfile">Meu Perfil</h2>
+        <div class="foto">
+            {% if usuario.foto %}
+            <img class="imgPerfil" src="{{ usuario.foto.url }}" alt="Foto de perfil" />
+            {% else %}
+            <p>Sem foto de perfil.</p>
+            {% endif %}
+
+
+            <div class="info"><label for="id_foto">Alterar foto de perfil:</label></div>
+
+            <div class="alterarfoto">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input class="inputIdFoto" id="id_foto" type="file" name="foto" accept="image/*">
+                    <button class="btnAtt" type="submit">Atualizar Foto</button>
+                </form>
+            </div>
+
+
+            <div class="info">
+                <p>Nome: {{ usuario.first_name }}</p>
+                <p>Email: {{ usuario.email }}</p>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+
+
+
+</html>
+
+{% endblock %}

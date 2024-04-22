@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Saira+Extra+Condensed:wght@600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-weight: Arial, Helvetica, sans-serif;
+            background-color: #111;
+        }
+
+        .rodape {
+            background-color: rgb(226, 226, 226);
+            color: black;
+            padding-top: 10px;
+
+        }
+
+        .conteudorodape {
+            display: flex;
+            flex-direction: column;
+            min-height: 130vh;
+        }
+
+
+
+        .h1 {
+            text-transform: uppercase;
+        }
+
+
+        /* STYLE PARA BARRA NAV */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            padding-bottom: 0;
+            padding-top: 0;
+            z-index: 1;
+            transition-timing-function: ease-in;
+            transition: all 0.5s;
+            background-color: rgb(26, 26, 34)
+        }
+
+
+        .nav_logo {
+            width: 150px;
+            object-fit: contain;
+        }
+
+        .nav_avatar {
+            border-radius: 5px;
+            width: 30px;
+            object-fit: contain;
+        }
+
+        
+        
+        .menuButtons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+
+        .btnEntrar {
+            background-color: rgb(160, 31, 31);
+            border: none;
+            color: white;
+            border-radius: 20px;
+            width: 150px;
+            height: 50%;
+            font-weight: 900;
+        }
+
+        .btnEntrar:hover {
+            color: #000;
+            background-color: #e6e6e6;
+            transition: all 0.2s;
+        }
+
+        .btnEntrar2 {
+            background-color: rgb(160, 31, 31);
+            border: none;
+            color: white;
+            border-radius: 20px;
+            width: 150px;
+            height: 40px;
+            font-weight: 900;
+        }
+
+        .btnEntrar2:hover {
+            color: #ffffff;
+            background-color: #792020;
+            transition: all 0.2s;
+        }
+
+        .btnFechar {
+            background-color: #666060;
+            border: none;
+            color: white;
+            border-radius: 20px;
+            width: 150px;
+            height: 40px;
+            font-weight: 900;
+        }
+
+        .btnFechar:hover {
+            color: #ffffff;
+            background-color: #3b3737;
+            transition: all 0.2s;
+        }
+
+        .menuArrow {
+            color: white;
+        }
+
+        .menuArrow:hover {
+            color: rgba(163, 25, 25);
+        }
+
+        .menuArrow:focus {
+            color: rgba(163, 25, 25);
+        }
+
+        .dropdown-item:active {
+            background-color: rgba(163, 25, 25);
+        }
+
+        .nav_avatar {
+            width: 50px;
+            /* Largura específica */
+            height: 50px;
+            /* Altura específica */
+            border-radius: 10px;
+            object-fit: cover;
+            /* Mantém a proporção da imagem, cortando se necessário */
+            background-size: cover;
+        }
+
+        .naveg-geral {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .naveg {
+            margin-left: 50px;
+        }
+
+        .naveg a {
+            color: rgb(233, 228, 228);
+            padding: 10px;
+            text-decoration: none;
+        }
+
+        .naveg a:hover {
+            color: rgb(170, 168, 168);
+            transition: all 0.5s;
+        }
+
+        .naveg a.active {
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+        }
+
+        .formRegister input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 20px;
+        }
+
+        
+        .alert {
+            margin: 20px;
+        }
+
+       
+    </style>
+
+
+
+
+</head>
+<title>CampsBET</title>
+
+<body>
+
+
+
+    {% if user.is_authenticated %}
+    <!-- Navbar para usuários LOGADOS -->
+
+    <div class="nav">
+
+        <div class="naveg-geral">
+            <a href="{% url 'home' %}">
+                <img class="nav_logo" src="https://i.imgur.com/rb9MnTt.png" alt="logo" />
+            </a>
+
+            <div class="naveg">
+                <a class="{% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}">Início</a>
+                <a href="#">Bombando</a>
+                <a href="#">Minha lista</a>
+            </div>
+
+        </div>
+
+
+
+        <div class="buttons">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle menuArrow" href="#" id="navbarDropdown" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if user.myuserprofile.foto %}
+                    <img class="nav_avatar" src="{{ user.foto.url }}" alt="avatar-default" />
+                    {% else %}
+                    <img class="nav_avatar" src="{{ user.foto.url|default:'fotos_perfil/default.png' }}"
+                        alt="avatar-default" />
+                    {% endif %}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{% url 'conta' %}"><i class="fa-solid fa-user"></i> Conta</a>
+                    </li>
+                    <li><a class="dropdown-item" href="#"><i class="fa-solid fa-circle-info"></i> Central de Ajuda</a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a></li>
+
+                    <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                        {% csrf_token %}
+                    </form>
+                </ul>
+
+            </li>
+        </div>
+
+    </div>
+
+    {% else %}
+    <!-- Navbar para VISITANTES -->
+
+    <div class="nav">
+        <a href="{% url 'home' %}">
+            <img class="nav_logo" src="https://i.imgur.com/rb9MnTt.png" alt="logo" />
+        </a>
+        <div class="menuButtons">
+            <button type="button" class="btnEntrar" data-bs-toggle="modal" data-bs-target="#modalLogin">
+                Entrar
+            </button>
+            <button type="button" class="btnEntrar" data-bs-toggle="modal" data-bs-target="#modalCadastro">
+                Cadastre-se
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Modal de Cadastro -->
+    <div class="modal fade"  id="modalCadastro" tabindex="-1" aria-labelledby="modalCadastroLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCadastroLabel">Cadastro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulário de Cadastro -->
+                    <form action="{% url 'cadastro' %}" method="post">
+                        {% csrf_token %}
+
+                        <div class="formRegister">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Nome" required>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Usuário"
+                                required>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+                                required>
+                            <input type="password" class="form-control" id="password" name="password"
+                                placeholder="Senha" required>
+                            <input type="password" class="form-control" id="password2" name="password2"
+                                placeholder="Repetir Senha" required>
+
+                        </div>
+
+
+                        <div class="modal-footer">
+                            <button type="button"  class="btnFechar" data-bs-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btnEntrar2">Cadastrar</button>
+                        </div>
+
+
+                    </form>
+
+
+                </div>
+
+            </div>
+            {% if messages %}
+            {% for message in messages %}
+
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+
+            {% endfor %}
+            {% endif %}
+        </div>
+
+    </div>
+
+
+    <!-- Modal de Login -->
+    <div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLoginLabel">Entrar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <form action="{% url 'login' %}" method="post">
+                        {% csrf_token %}
+
+                        <div class="formRegister">
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Usuário"
+                                required>
+                            <input type="password" class="form-control" id="password" name="password"
+                                placeholder="Senha" required>
+                        </div>
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btnFechar" data-bs-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btnEntrar2">Entrar</button>
+                        </div>
+
+
+                    </form>
+
+
+                </div>
+
+            </div>
+            {% if messages %}
+            {% for message in messages %}
+
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+
+            {% endfor %}
+            {% endif %}
+        </div>
+
+    </div>
+
+
+
+
+
+
+    {% endif %}
+
+
+    <div class="conteudopagina">
+        {% block content %}
+        {% endblock %}
+
+
+
+
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Verifica se deve abrir algum modal baseado na variável enviada pelo Django
+            const modalShow = "{{ modal_show }}";
+            if (modalShow === "login") {
+                new bootstrap.Modal(document.getElementById('modalLogin')).show();
+            } else if (modalShow === "cadastro") {
+                new bootstrap.Modal(document.getElementById('modalCadastro')).show();
+            }
+        });
+    </script>
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('.alert').fadeOut('slow');
+            }, 1500); // 3000 milissegundos = 3 segundos
+        });
+    </script>
+
+
+
+</body>
+
+
+
+</html>
