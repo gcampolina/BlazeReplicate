@@ -61,7 +61,7 @@
             z-index: 1;
             transition-timing-function: ease-in;
             transition: all 0.5s;
-            background-color: rgb(26, 26, 34)
+            background-color: rgb(26, 26, 34);
         }
 
 
@@ -76,8 +76,8 @@
             object-fit: contain;
         }
 
-        
-        
+
+
         .menuButtons {
             display: flex;
             justify-content: center;
@@ -90,7 +90,7 @@
             justify-content: center;
             align-items: center;
         }
-        
+
 
         .btnEntrar {
             background-color: rgb(160, 31, 31);
@@ -180,7 +180,19 @@
         .naveg a {
             color: rgb(233, 228, 228);
             padding: 10px;
+            padding-left: 0;
             text-decoration: none;
+        }
+
+        .new {
+            font-weight: 800;
+            color: rgb(255, 102, 0);
+            font-size: 12px;
+        }
+
+        .naveg a:last-child {
+            border-right: none;
+            /* Remove a borda do último item */
         }
 
         .naveg a:hover {
@@ -200,12 +212,26 @@
             border-radius: 20px;
         }
 
-        
+
         .alert {
             margin: 20px;
         }
 
-       
+        .menu-icon {
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+
+
+        .saldo {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+
+        }
+
+        
     </style>
 
 
@@ -223,15 +249,22 @@
 
     <div class="nav">
 
+
+
         <div class="naveg-geral">
+
+
             <a href="{% url 'home' %}">
                 <img class="nav_logo" src="https://i.imgur.com/rb9MnTt.png" alt="logo" />
             </a>
 
             <div class="naveg">
                 <a class="{% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}">Início</a>
-                <a href="#">Bombando</a>
-                <a href="#">Minha lista</a>
+                <a href="#">Double</a>
+                <a href="#">Crash</a>
+                <a href="#">Dice</a>
+                <a href="#">Slots</a>
+
             </div>
 
         </div>
@@ -239,6 +272,13 @@
 
 
         <div class="buttons">
+
+            <div class="saldo">
+                <span style="margin-right: 5px; color: white; font-weight: bold;">Saldo: {{ user.saldo }}</span>
+                <img style="width: 25px; height: 25px;" src="https://i.imgur.com/4hDiFn6.png" alt="">
+
+            </div>
+
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle menuArrow" href="#" id="navbarDropdown" role="button"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -250,15 +290,23 @@
                     {% endif %}
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="{% url 'conta' %}"><i class="fa-solid fa-user"></i> Conta</a>
+                    <li><a class="dropdown-item" href="{% url 'conta' %}"><i class="fa-solid fa-user menu-icon"></i>
+                            Conta</a>
                     </li>
-                    <li><a class="dropdown-item" href="#"><i class="fa-solid fa-circle-info"></i> Central de Ajuda</a>
+                    <li><a class="dropdown-item" href="#"><i
+                                class="fa-solid fa-money-bill-wave menu-icon"></i> Depósito</a>
+                    </li>
+                    <li><a class="dropdown-item" href="#"><i
+                                class="fa-solid fa-money-bill-transfer menu-icon"></i></i> Saque</a>
+                    </li>
+                    <li><a class="dropdown-item" href="#"><i class="fa-solid fa-circle-info menu-icon"></i> Central de
+                            Ajuda</a>
                     </li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
                     <li><a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">
-                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a></li>
+                            <i class="fa-solid fa-arrow-right-from-bracket menu-icon"></i> Sair</a></li>
 
                     <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
                         {% csrf_token %}
@@ -268,6 +316,7 @@
             </li>
         </div>
 
+    
     </div>
 
     {% else %}
@@ -289,7 +338,7 @@
     </div>
 
     <!-- Modal de Cadastro -->
-    <div class="modal fade"  id="modalCadastro" tabindex="-1" aria-labelledby="modalCadastroLabel" aria-hidden="true">
+    <div class="modal fade" id="modalCadastro" tabindex="-1" aria-labelledby="modalCadastroLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -316,7 +365,7 @@
 
 
                         <div class="modal-footer">
-                            <button type="button"  class="btnFechar" data-bs-dismiss="modal">Fechar</button>
+                            <button type="button" class="btnFechar" data-bs-dismiss="modal">Fechar</button>
                             <button type="submit" class="btnEntrar2">Cadastrar</button>
                         </div>
 

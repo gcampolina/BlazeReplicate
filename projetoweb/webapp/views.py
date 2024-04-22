@@ -41,6 +41,13 @@ def conta(request):
     context = {'form': form, 'usuario': request.user}
     return render(request, 'conta.html', context)
 
+@login_required
+def some_view(request):
+    # Supõe-se que request.user seja o usuário logado
+    context = {
+        'saldo': request.user.saldo  # Acessa o saldo do usuário e passa para o template
+    }
+    return render(request, 'home.html', context)
 
 def cadastro(request):
     modal_show = False  # Começa com o modal não mostrando

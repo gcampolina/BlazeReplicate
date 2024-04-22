@@ -9,6 +9,10 @@ class CustomUser(AbstractUser):
         null=True,
         default='fotos_perfil/default.jpg'
     )
+     
+     saldo = models.FloatField(
+         default=0
+     )
 
      def __str__(self):
         return self.username
