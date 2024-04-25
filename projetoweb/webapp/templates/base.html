@@ -26,19 +26,59 @@
         body {
             font-weight: Arial, Helvetica, sans-serif;
             background-color: #111;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+
+        }
+
+        body::-webkit-scrollbar {
+            width: 6px;
+            
+            /* Largura da barra de rolagem */
+        }
+
+        /* Estilizar a parte da barra de rolagem que é a faixa de fundo */
+        body::-webkit-scrollbar-track {
+            background: #333;
+            /* Cor de fundo da faixa da barra de rolagem */
+        }
+
+        /* Estilizar o indicador da barra de rolagem */
+        body::-webkit-scrollbar-thumb {
+            background-color: #666;
+            /* Cor do indicador da barra de rolagem */
+            border-radius: 10px;
+            /* Raio da borda do indicador (torna-o redondo) */
         }
 
         .rodape {
-            background-color: rgb(226, 226, 226);
-            color: black;
-            padding-top: 10px;
+            
+            width: 100%;
+            background-color: rgb(26, 26, 34);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
 
         }
 
+
         .conteudorodape {
+            padding-top: 20px;
+            text-align: center;
             display: flex;
+            flex: 1;
             flex-direction: column;
-            min-height: 130vh;
+
+        }
+
+        .conteudopagina {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: thin;
+
         }
 
 
@@ -62,6 +102,8 @@
             transition-timing-function: ease-in;
             transition: all 0.5s;
             background-color: rgb(26, 26, 34);
+            flex: 1;
+            /* Faz com que o conteúdo ocupe o espaço restante */
         }
 
 
@@ -231,111 +273,123 @@
 
         }
 
-        
+        .btninsta {
+            background-color: rgba(163, 25, 25);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .btninsta:hover {
+            background-color: white;
+            color: black;
+        }
     </style>
 
 
 
+    <title>CampsBET</title>
+
 
 </head>
-<title>CampsBET</title>
+
+
+
+{% if user.is_authenticated %}
+<!-- Navbar para usuários LOGADOS -->
+
+<div class="nav">
+
+
+
+    <div class="naveg-geral">
+
+
+        <a href="{% url 'home' %}">
+            <img class="nav_logo" src="https://i.imgur.com/rb9MnTt.png" alt="logo" />
+        </a>
+
+        <div class="naveg">
+            <a class="{% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}">Início</a>
+            <a href="#">Double</a>
+            <a href="#">Crash</a>
+            <a href="#">Dice</a>
+            <a href="#">Slots</a>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="buttons">
+
+        <div class="saldo">
+            <span style="margin-right: 5px; color: white; font-weight: bold;">Saldo: {{ user.saldo }}</span>
+            <img style="width: 25px; height: 25px;" src="https://i.imgur.com/4hDiFn6.png" alt="">
+
+        </div>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle menuArrow" href="#" id="navbarDropdown" role="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                {% if user.myuserprofile.foto %}
+                <img class="nav_avatar" src="{{ user.foto.url }}" alt="avatar-default" />
+                {% else %}
+                <img class="nav_avatar" src="{{ user.foto.url|default:'fotos_perfil/default.png' }}"
+                    alt="avatar-default" />
+                {% endif %}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="{% url 'conta' %}"><i class="fa-solid fa-user menu-icon"></i>
+                        Conta</a>
+                </li>
+                <li><a class="dropdown-item" href="#"><i class="fa-solid fa-money-bill-wave menu-icon"></i>
+                        Depósito</a>
+                </li>
+                <li><a class="dropdown-item" href="#"><i class="fa-solid fa-money-bill-transfer menu-icon"></i></i>
+                        Saque</a>
+                </li>
+                <li><a class="dropdown-item" href="#"><i class="fa-solid fa-circle-info menu-icon"></i> Central de
+                        Ajuda</a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">
+                        <i class="fa-solid fa-arrow-right-from-bracket menu-icon"></i> Sair</a></li>
+
+                <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                    {% csrf_token %}
+                </form>
+            </ul>
+
+        </li>
+    </div>
+
+
+</div>
+
+{% else %}
+<!-- Navbar para VISITANTES -->
+
+<div class="nav">
+    <a href="{% url 'home' %}">
+        <img class="nav_logo" src="https://i.imgur.com/rb9MnTt.png" alt="logo" />
+    </a>
+    <div class="menuButtons">
+        <button type="button" class="btnEntrar" data-bs-toggle="modal" data-bs-target="#modalLogin">
+            Entrar
+        </button>
+        <button type="button" class="btnEntrar" data-bs-toggle="modal" data-bs-target="#modalCadastro">
+            Cadastre-se
+        </button>
+    </div>
+
+</div>
 
 <body>
 
 
-
-    {% if user.is_authenticated %}
-    <!-- Navbar para usuários LOGADOS -->
-
-    <div class="nav">
-
-
-
-        <div class="naveg-geral">
-
-
-            <a href="{% url 'home' %}">
-                <img class="nav_logo" src="https://i.imgur.com/rb9MnTt.png" alt="logo" />
-            </a>
-
-            <div class="naveg">
-                <a class="{% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}">Início</a>
-                <a href="#">Double</a>
-                <a href="#">Crash</a>
-                <a href="#">Dice</a>
-                <a href="#">Slots</a>
-
-            </div>
-
-        </div>
-
-
-
-        <div class="buttons">
-
-            <div class="saldo">
-                <span style="margin-right: 5px; color: white; font-weight: bold;">Saldo: {{ user.saldo }}</span>
-                <img style="width: 25px; height: 25px;" src="https://i.imgur.com/4hDiFn6.png" alt="">
-
-            </div>
-
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle menuArrow" href="#" id="navbarDropdown" role="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    {% if user.myuserprofile.foto %}
-                    <img class="nav_avatar" src="{{ user.foto.url }}" alt="avatar-default" />
-                    {% else %}
-                    <img class="nav_avatar" src="{{ user.foto.url|default:'fotos_perfil/default.png' }}"
-                        alt="avatar-default" />
-                    {% endif %}
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="{% url 'conta' %}"><i class="fa-solid fa-user menu-icon"></i>
-                            Conta</a>
-                    </li>
-                    <li><a class="dropdown-item" href="#"><i
-                                class="fa-solid fa-money-bill-wave menu-icon"></i> Depósito</a>
-                    </li>
-                    <li><a class="dropdown-item" href="#"><i
-                                class="fa-solid fa-money-bill-transfer menu-icon"></i></i> Saque</a>
-                    </li>
-                    <li><a class="dropdown-item" href="#"><i class="fa-solid fa-circle-info menu-icon"></i> Central de
-                            Ajuda</a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">
-                            <i class="fa-solid fa-arrow-right-from-bracket menu-icon"></i> Sair</a></li>
-
-                    <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
-                        {% csrf_token %}
-                    </form>
-                </ul>
-
-            </li>
-        </div>
-
-    
-    </div>
-
-    {% else %}
-    <!-- Navbar para VISITANTES -->
-
-    <div class="nav">
-        <a href="{% url 'home' %}">
-            <img class="nav_logo" src="https://i.imgur.com/rb9MnTt.png" alt="logo" />
-        </a>
-        <div class="menuButtons">
-            <button type="button" class="btnEntrar" data-bs-toggle="modal" data-bs-target="#modalLogin">
-                Entrar
-            </button>
-            <button type="button" class="btnEntrar" data-bs-toggle="modal" data-bs-target="#modalCadastro">
-                Cadastre-se
-            </button>
-        </div>
-
-    </div>
 
     <!-- Modal de Cadastro -->
     <div class="modal fade" id="modalCadastro" tabindex="-1" aria-labelledby="modalCadastroLabel" aria-hidden="true">
@@ -439,15 +493,25 @@
 
     {% endif %}
 
+    <div class="conteudorodape">
+        <div class="conteudopagina">
+            {% block content %}
+            {% endblock %}
+        </div>
 
-    <div class="conteudopagina">
-        {% block content %}
-        {% endblock %}
 
-
-
-
+        <div class="rodape">
+            <p>Copyright &copy; 2024 CampsBET Todos os
+                direitos reservados.</p>
+            <p style="color: rgb(230, 127, 59); font-weight: bold;">Esta é apenas uma aplicação fictícia e não se trata
+                de um cassino real</p>
+                <a href="#" class="btn btninsta" target="_blank"><i class="fab fa-instagram"></i>
+                </a>
+            <p>Desenvolvido por Gabriel Campolina</p>
+            
+        </div>
     </div>
+
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
