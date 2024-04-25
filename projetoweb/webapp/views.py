@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, update_session_auth_hash
 from .models import CustomUser
 from .forms import FotoPerfilForm
 from django.contrib.auth.decorators import login_required
@@ -48,6 +48,40 @@ def some_view(request):
         'saldo': request.user.saldo  # Acessa o saldo do usuário e passa para o template
     }
     return render(request, 'home.html', context)
+
+@login_required
+def alterar_senha(request):
+    modal_show = False  # Inicialmente, o modal deve permanecer aberto
+    if request.method == 'POST':
+        senha_atual = request.POST.get('senha_atual')
+        nova_senha = request.POST.get('nova_senha')
+        confirmar_senha = request.POST.get('confirmar_senha')
+
+        if nova_senha != confirmar_senha:
+            messages.warning(request, 'As novas senhas não coincidem.')
+            return redirect('conta')
+
+        else:
+            user = request.user
+            if not user.check_password(senha_atual):
+                messages.warning(request, 'A senha atual está incorreta.')
+                return redirect('conta')
+                
+
+            else:
+                user.set_password(nova_senha)
+                user.save()
+                # Atualize a sessão do usuário para manter a autenticação
+                update_session_auth_hash(request, user)
+                messages.success(request, 'Senha alterada com sucesso.')
+                return redirect('conta')  # Redirecione apenas em caso de sucesso
+
+    # Renderize a página 'conta' com o modal_show definido para manter o modal aberto
+    return render(request, 'conta.html', {'modal_show': modal_show})
+
+
+
+
 
 def cadastro(request):
     modal_show = False  # Começa com o modal não mostrando

@@ -21,11 +21,11 @@
             min-height: 100vh;
             margin: 0;
             color: white;
-           
+
         }
 
         .profile {
-            
+
             margin-top: 30%;
             display: flex;
             flex-direction: column;
@@ -76,22 +76,8 @@
             text-align: center;
             display: block;
         }
-        
 
-        .btnAtt {
-            background-color: rgb(160, 31, 31);
-            border: none;
-            color: white;
-            border-radius: 20px;
-            width: 100%;
-            font-weight: 900;
-        }
 
-        .btnAtt:hover {
-            color: #000;
-            background-color: #e6e6e6;
-            transition: all 0.2s;
-        }
 
         .titleProfile {
             font-size: 20px;
@@ -103,10 +89,72 @@
         .info {
             padding-top: 20px;
         }
+
+        .btnAtt {
+            background-color: rgb(160, 31, 31);
+            border: none;
+            color: white;
+            border-radius: 20px;
+            width: 150px;
+            height: 40px;
+            font-weight: 900;
+           
+        }
+
+        .btnAtt:hover {
+            color: #ffffff;
+            background-color: #792020;
+            transition: all 0.2s;
+        }
+
+        .btnFechar {
+            background-color: #666060;
+            border: none;
+            color: white;
+            border-radius: 20px;
+            width: 150px;
+            height: 40px;
+            font-weight: 900;
+        }
+
+        .btnFechar:hover {
+            color: #ffffff;
+            background-color: #3b3737;
+            transition: all 0.2s;
+        }
+
+        .alert {
+            position: fixed;
+            top: 20px;
+            /* Defina a posição verticalmente conforme necessário */
+            left: 50%;
+            /* Centralize horizontalmente */
+            transform: translateX(-50%);
+            z-index: 9999;
+            /* Garante que a mensagem seja exibida acima do conteúdo */
+            width: 80%;
+            /* Defina a largura conforme necessário */
+            max-width: 400px;
+            /* Defina a largura máxima conforme necessário */
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        
     </style>
 </head>
 
 <body>
+
+    {% if messages %}
+    {% for message in messages %}
+
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+
+    {% endfor %}
+    {% endif %}
+
     <div class="profile">
 
         <h2 class="titleProfile">Meu Perfil</h2>
@@ -117,25 +165,84 @@
             <p>Sem foto de perfil.</p>
             {% endif %}
 
-
-            <div class="info"><label for="id_foto">Alterar foto de perfil:</label></div>
+            <div class="info">
+                <p>Nome: {{ usuario.first_name }}</p>
+                <p>Email: {{ usuario.email }}</p>
+            </div>
+            <label style="font-weight: bold;" for="id_foto">Alterar foto de perfil:</label>
 
             <div class="alterarfoto">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input class="inputIdFoto" id="id_foto" type="file" name="foto" accept="image/*">
-                    <button class="btnAtt" type="submit">Atualizar Foto</button>
                 </form>
             </div>
 
-
-            <div class="info">
-                <p>Nome: {{ usuario.first_name }}</p>
-                <p>Email: {{ usuario.email }}</p>
+            
+                <button class="btnAtt" style="margin-bottom: 20px;" type="submit">Atualizar Foto</button>
+                <button class="btnAtt" data-bs-toggle="modal" data-bs-target="#modalSenha">
+                    Alterar Senha
+                
             </div>
+            
+
+
+
+
         </div>
 
     </div>
+
+
+    <!-- Modal de AlterarSenha -->
+    <div class="modal fade" id="modalSenha" tabindex="-1" aria-labelledby="modalSenhaLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="color: black;" id="modalSenhaLabel">Alterar Senha</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="info">
+                        <form method="post" action="{% url 'alterar_senha' %}">
+                            {% csrf_token %}
+
+
+                            <div class="formRegister">
+                                <input type="password" class="form-control" id="id_senha_atual" name="senha_atual"
+                                    placeholder="Senha Atual" required>
+                                <input type="password" class="form-control" id="id_nova_senha" name="nova_senha"
+                                    placeholder="Nova Senha" required>
+                                <input type="password" class="form-control" id="id_confirmar_senha"
+                                    name="confirmar_senha" placeholder="Confirmar Nova Senha" required>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btnFechar" data-bs-dismiss="modal">Fechar</button>
+                                <button class="btnAtt" type="submit">Alterar Senha</button>
+                            </div>
+
+                        </form>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+        
+    </div>
+
+
+
+
+    
+
+
+
+
 </body>
 
 
